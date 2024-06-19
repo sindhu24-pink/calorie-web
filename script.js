@@ -2,11 +2,11 @@
 function addFoodItem() {
     const foodItemsDiv = document.getElementById('food-items');
     const newFoodItemDiv = document.createElement('div');
-    newFoodItemDiv.classList.add('food-item');
+    newFoodItemDiv.classList.add('food-item', 'form-group');
     newFoodItemDiv.innerHTML = `
-        <label for="food">Food:</label>
+        <label for="food"><i class="fas fa-hamburger"></i> Food:</label>
         <input type="text" class="food" name="food" required>
-        <label for="calories">Calories:</label>
+        <label for="calories"><i class="fas fa-fire"></i> Calories:</label>
         <input type="number" class="calories" name="calories" required>
     `;
     foodItemsDiv.appendChild(newFoodItemDiv);
@@ -64,16 +64,28 @@ function calculateBMIAndCalories() {
         userResult.innerHTML = '';  // Clear previous results
 
         const results = [
-            `BMI: ${bmi}`,
-            `Daily Caloric Needs: ${dailyCalories} calories`,
-            `Total Calories from Food: ${totalCalories} calories`,
-            getDietSuggestion(bmi, totalCalories, dailyCalories)
+            { title: 'BMI', value: `${bmi}` },
+            { title: 'Daily Caloric Needs', value: `${dailyCalories} calories` },
+            { title: 'Total Calories from Food', value: `${totalCalories} calories` },
+            { title: 'Tip', value: getDietSuggestion(bmi, totalCalories, dailyCalories), isTip: true }
         ];
 
-        results.forEach(line => {
-            const lineElement = document.createElement('p');
-            lineElement.textContent = line;
-            userResult.appendChild(lineElement);
+        results.forEach(result => {
+            const section = document.createElement('div');
+            section.classList.add('section');
+            if (result.isTip) {
+                section.classList.add('tip');
+            }
+
+            const title = document.createElement('h3');
+            title.textContent = result.title;
+            section.appendChild(title);
+
+            const value = document.createElement('p');
+            value.textContent = result.value;
+            section.appendChild(value);
+
+            userResult.appendChild(section);
         });
     }
 }
@@ -90,15 +102,12 @@ function getDietSuggestion(bmi, totalCalories, dailyCalories) {
     }
 
     if (bmi < 18.5) {
-        suggestion += "YOU ARE UNDERWEIGHT.->Breakfast: Greek yogurt with granola, berries, and honey.->Morning Snack: Smoothie with whole milk, protein powder, spinach, banana, and almond butter.->Lunch: Grilled chicken with quinoa, roasted vegetables, and a salad with olive oil dressing.->Afternoon Snack: Trail mix with dried fruits and nuts.->Evening Snack: Cottage cheese with pineapple chunks.->Dinner: Baked salmon with brown rice, steamed asparagus,and a mixed green salad with nuts.->Tip: Eat 5-6 small meals daily to increase calorie intake.";
+        suggestion += " YOU ARE UNDERWEIGHT. Breakfast: Greek yogurt with granola, berries, and honey. Morning Snack: Smoothie with whole milk, protein powder, spinach, banana, and almond butter. Lunch: Grilled chicken with quinoa, roasted vegetables, and a salad with olive oil dressing. Afternoon Snack: Trail mix with dried fruits and nuts. Evening Snack: Cottage cheese with pineapple chunks. Dinner: Baked salmon with brown rice, steamed asparagus,and a mixed green salad with nuts. Tip: Eat 5-6 small meals daily to increase calorie intake.";
     } else if (bmi < 24.9) {
-        suggestion += "YOU ARE HEALTY WEIGHT.->Breakfast: Whole grain toast with avocado and a poached egg.->Morning Snack: Apple slices with almond butter.->Lunch: Quinoa salad with mixed greens, grilled chicken, cherry tomatoes, cucumbers, and a vinaigrette dressing.->Afternoon Snack: Greek yogurt with honey and a handful of mixed nuts.->Evening Snack: A small bowl of mixed berries.->Dinner: Baked salmon with roasted sweet potatoes and steamed broccoli.->Tip: Include a balance of protein, healthy fats, and whole grains in each meal.->Focus: Maintain portion control and ensure a variety of colorful fruits and vegetables.";
-    } else if (bmi < 29.9) {
-        suggestion += "YOU ARE OVERWEIGHT.->Breakfast: Overnight oats with chia seeds, berries, and a drizzle of honey.->Morning Snack: Carrot sticks with hummus.->Lunch: Grilled chicken salad with mixed greens, cherry tomatoes, cucumbers, bell peppers, and a light vinaigrette.->Afternoon Snack: A small handful of almonds.->Evening Snack: A small apple or a serving of mixed berries.->Dinner: Baked cod with quinoa and steamed broccoli.->Tip: Focus on portion control and include plenty of vegetables.->Focus: Prioritize lean proteins, whole grains, and minimize added sugars and unhealthy fats.";
+        suggestion += " YOU ARE OVERWEIGHT. Breakfast: Overnight oats with chia seeds, berries, and a drizzle of honey. Morning Snack: Carrot sticks with hummus. Lunch: Grilled chicken salad with mixed greens, cherry tomatoes, cucumbers, bell peppers, and a light vinaigrette. Afternoon Snack: A small handful of almonds. Evening Snack: A small apple or a serving of mixed berries. Dinner: Baked cod with quinoa and steamed broccoli. Tip: Focus on portion control and include plenty of vegetables. Focus: Prioritize lean proteins, whole grains, and minimize added sugars and unhealthy fats.";
     } else {
-        suggestion += "YOU ARE OBESE.->Breakfast: Scrambled eggs with spinach and whole grain toast, accompanied by a glass of water or herbal tea.->Mid-Morning Snack: Greek yogurt with sliced fruits like berries or a small portion of mixed nuts.->Lunch: Grilled chicken breast or tofu with a large mixed salad (lettuce, tomatoes, cucumbers, carrots) dressed with olive oil and vinegar.->Afternoon Snack: Raw vegetable sticks (carrots, bell peppers) with hummus or a small portion of air-popped popcorn.->Dinner: Baked fish (salmon or cod) with quinoa or brown rice and steamed vegetables (broccoli, cauliflower).Evening Snack: A small bowl of cottage cheese with pineapple chunks or a piece of fruit.->Tip: Drink plenty of water throughout the day and avoid sugary beverages.->Focus: Incorporate lean proteins, whole grains, and plenty of fruits and vegetables, and limit processed foods and added sugars. Regular physical activity is also essential for weight management.";
+        suggestion += " YOU ARE OBESE. Breakfast: Scrambled eggs with spinach and whole grain toast, accompanied by a glass of water or herbal tea. Mid-Morning Snack: Greek yogurt with sliced fruits like berries or a small portion of mixed nuts. Lunch: Grilled chicken breast or tofu with a large mixed salad (lettuce, tomatoes, cucumbers, carrots) dressed with olive oil and vinegar. Afternoon Snack: Raw vegetable sticks (carrots, bell peppers) with hummus or a small portion of air-popped popcorn. Dinner: Baked fish (salmon or cod) with quinoa or brown rice and steamed vegetables (broccoli, cauliflower). Evening Snack: A small bowl of cottage cheese with pineapple chunks or a piece of fruit. Tip: Drink plenty of water throughout the day and avoid sugary beverages. Focus: Incorporate lean proteins, whole grains, and plenty of fruits and vegetables, and limit processed foods and added sugars. Regular physical activity is also essential for weight management.";
     }
 
     return suggestion;
 }
-
